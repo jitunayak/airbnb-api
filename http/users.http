@@ -1,0 +1,12 @@
+@host= http://localhost:8787
+@userId=fada82b0-3101-42d3-9b7b-0b7b386a4c78
+
+
+### Get All users
+GET {{host}}/api/v1/users
+
+### Get details of individual user
+GET {{host}}/api/v1/users/{{userId}}
+
+### Get wishlists of a user
+GET {{host}}/api/v1/users/{{userId}}/wishlists
