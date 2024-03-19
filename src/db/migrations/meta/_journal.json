@@ -1,0 +1,20 @@
+{
+  "version": "5",
+  "dialect": "pg",
+  "entries": [
+    {
+      "idx": 0,
+      "version": "5",
+      "when": 1710830975086,
+      "tag": "0000_wise_korath",
+      "breakpoints": true
+    },
+    {
+      "idx": 1,
+      "version": "5",
+      "when": 1710848691703,
+      "tag": "0001_careful_makkari",
+      "breakpoints": true
+    }
+  ]
+}
