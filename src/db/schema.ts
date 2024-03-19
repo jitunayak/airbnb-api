@@ -1,5 +1,4 @@
-import { relations } from 'drizzle-orm';
-import { pgTable, text, timestamp } from 'drizzle-orm/pg-core';
+import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
 
 export const users = pgTable('users', {
 	id: text('id').primaryKey(),
@@ -9,7 +8,7 @@ export const users = pgTable('users', {
 });
 
 export const wishlists = pgTable('wishlist', {
-	id: text('id').primaryKey(),
+	id: uuid('uuid1').defaultRandom().primaryKey(),
 	roomId: text('room_id').notNull(),
 	userId: text('user_id')
 		.notNull()
@@ -17,6 +16,6 @@ export const wishlists = pgTable('wishlist', {
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 });
 
-export const wishlistRelations = relations(wishlists, ({ one, many }) => ({
-	user: one(users, { fields: [wishlists.userId], references: [users.id] }),
-}));
+// export const wishlistRelations = relations(wishlists, ({ one, many }) => ({
+// 	user: one(users, { fields: [wishlists.userId], references: [users.id] }),
+// }));

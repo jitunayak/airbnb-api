@@ -30,12 +30,10 @@ const main = async () => {
 
 		await db.insert(wishlists).values([
 			{
-				id: '1',
 				userId,
 				roomId: '12345',
 			},
 			{
-				id: '2',
 				userId,
 				roomId: '67890',
 			},
