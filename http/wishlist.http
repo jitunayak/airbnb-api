@@ -1,18 +1,19 @@
 @host= http://localhost:8787
 @userId=fada82b0-3101-42d3-9b7b-0b7b386a4c78
-@wishListId=52a2bf77-0493-40b3-bd6f-deb80814d2ee
 
 ### get all wishlists
 GET {{host}}/api/v1/wishlists
 
-### get wishlists for a user
-GET {{host}}/api/v1/wishlists/{{wishListId}}
 
 ### 
+# @name createWishlist
 POST {{host}}/api/v1/wishlists
 Content-Type: application/json
 
 {
-    "roomId": "11",
+    "roomId": "13",
     "userId": "{{userId}}"
 }
+
+### Get wishlists for a user
+GET {{host}}/api/v1/wishlists/{{createWishlist.response.body.id}}
