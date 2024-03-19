@@ -4,7 +4,7 @@ import { drizzle } from 'drizzle-orm/neon-serverless';
 import { Hono } from 'hono';
 import { Env } from '..';
 import { users, wishlists } from '../db/schema';
-import { handlerError } from '../util';
+import { handlerError } from '../utils/util';
 
 export const usersRoute = new Hono<{ Bindings: Env }>();
 
@@ -30,7 +30,9 @@ usersRoute.get('/:id', async (c) => {
 			.select()
 			.from(users)
 			.where(eq(users.id, c.req.param('id')));
-
+		if (result.length === 0) {
+			return c.status(404);
+		}
 		return c.json(result[0]);
 	} catch (error) {
 		handlerError(error);

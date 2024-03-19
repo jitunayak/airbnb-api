@@ -1,6 +1,5 @@
 import { Hono } from 'hono';
-import { usersRoute } from './routes/users';
-import { wishlistsRoutes } from './routes/wishlists';
+import { usersRoute, wishlistsRoutes } from './routes';
 export type Env = {
 	DATABASE_URL: string;
 };

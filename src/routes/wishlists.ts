@@ -4,7 +4,7 @@ import { drizzle } from 'drizzle-orm/neon-serverless';
 import { Hono } from 'hono';
 import { Env } from '..';
 import { wishlists } from '../db/schema';
-import { handlerError } from '../util';
+import { handlerError } from '../utils/util';
 
 export const wishlistsRoutes = new Hono<{ Bindings: Env }>();
 
@@ -30,6 +30,9 @@ wishlistsRoutes.get('/:id', async (c) => {
 			.select()
 			.from(wishlists)
 			.where(eq(wishlists.id, c.req.param('id')));
+		if (result.length === 0) {
+			return c.status(404);
+		}
 		return c.json(result[0]);
 	} catch (error) {
 		handlerError(error);
