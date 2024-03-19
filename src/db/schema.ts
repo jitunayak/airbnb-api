@@ -1,4 +1,5 @@
 import { pgTable, text, timestamp, uuid } from 'drizzle-orm/pg-core';
+import { createInsertSchema } from 'drizzle-zod';
 
 export const users = pgTable('users', {
 	id: text('id').primaryKey(),
@@ -15,6 +16,9 @@ export const wishlists = pgTable('wishlist', {
 		.references(() => users.id),
 	createdAt: timestamp('created_at').defaultNow().notNull(),
 });
+
+export const insertWishlistSchema = createInsertSchema(wishlists);
+export const insertUserSchema = createInsertSchema(users);
 
 // export const wishlistRelations = relations(wishlists, ({ one, many }) => ({
 // 	user: one(users, { fields: [wishlists.userId], references: [users.id] }),

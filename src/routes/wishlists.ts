@@ -2,8 +2,9 @@ import { Pool } from '@neondatabase/serverless';
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { Hono } from 'hono';
+import { ZodError } from 'zod';
 import { Env } from '..';
-import { wishlists } from '../db/schema';
+import { insertWishlistSchema, wishlists } from '../db/schema';
 import { handlerError } from '../utils/util';
 
 export const wishlistsRoutes = new Hono<{ Bindings: Env }>();
@@ -24,10 +25,8 @@ wishlistsRoutes.get('/', async (c) => {
 
 wishlistsRoutes.post('/', async (c) => {
 	try {
-		const { userId, roomId } = await c.req.json();
-		if (!userId || !roomId) {
-			return c.json({ message: 'userId and roomId is required' });
-		}
+		const body = await c.req.json();
+		const { userId, roomId } = insertWishlistSchema.parse(body);
 		const client = new Pool({ connectionString: c.env.DATABASE_URL });
 		const db = drizzle(client);
 
@@ -52,6 +51,9 @@ wishlistsRoutes.post('/', async (c) => {
 		c.status(201);
 		return c.json(result[0]);
 	} catch (error) {
+		if (error instanceof ZodError) {
+			return c.json({ error: error.issues });
+		}
 		handlerError(error);
 	}
 });

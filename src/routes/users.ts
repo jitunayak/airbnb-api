@@ -2,8 +2,9 @@ import { Pool } from '@neondatabase/serverless';
 import { eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { Hono } from 'hono';
+import { ZodError } from 'zod';
 import { Env } from '..';
-import { users, wishlists } from '../db/schema';
+import { insertUserSchema, users, wishlists } from '../db/schema';
 import { handlerError } from '../utils/util';
 
 export const usersRoute = new Hono<{ Bindings: Env }>();
@@ -35,6 +36,22 @@ usersRoute.get('/:id', async (c) => {
 		}
 		return c.json(result[0]);
 	} catch (error) {
+		handlerError(error);
+	}
+});
+
+usersRoute.post('', async (c) => {
+	try {
+		const body = await c.req.json();
+		const { name, email, id } = insertUserSchema.parse(body);
+		const client = new Pool({ connectionString: c.env.DATABASE_URL });
+		const db = drizzle(client);
+		const result = await db.insert(users).values({ email, name, id }).returning();
+		return c.json(result[0]);
+	} catch (error) {
+		if (error instanceof ZodError) {
+			return c.json({ error: error.issues });
+		}
 		handlerError(error);
 	}
 });
