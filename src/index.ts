@@ -4,12 +4,9 @@ export type Env = {
 	DATABASE_URL: string;
 };
 
-const app = new Hono<{ Bindings: Env }>();
-const routes = new Hono<{ Bindings: Env }>();
+const app = new Hono<{ Bindings: Env }>().basePath('/api/v1');
 
-routes.route('/wishlists', wishlistsRoutes);
-routes.route('/users', usersRoute);
-
-app.route('/api/v1', routes);
+app.route('/wishlists', wishlistsRoutes);
+app.route('/users', usersRoute);
 
 export default app;

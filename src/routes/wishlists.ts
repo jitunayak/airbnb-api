@@ -2,6 +2,7 @@ import { Pool } from '@neondatabase/serverless';
 import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { Hono } from 'hono';
+import { HTTPException } from 'hono/http-exception';
 import { ZodError } from 'zod';
 import { Env } from '..';
 import { insertWishlistSchema, wishlists } from '../db/schema';
@@ -37,8 +38,7 @@ wishlistsRoutes.post('/', async (c) => {
 			.where(and(eq(wishlists.userId, userId), eq(wishlists.roomId, roomId)));
 
 		if (alreadyWishlisted.length > 0) {
-			c.status(409);
-			return c.json({ message: 'Already wishlisted' });
+			throw new HTTPException(409, { message: 'Already wishlisted' });
 		}
 
 		const result = await db
@@ -67,8 +67,7 @@ wishlistsRoutes.get('/:id', async (c) => {
 			.from(wishlists)
 			.where(eq(wishlists.id, c.req.param('id')));
 		if (result.length === 0) {
-			c.status(404);
-			return c.json({ message: 'Not found' });
+			throw new HTTPException(404, { message: 'Not found' });
 		}
 		return c.json(result[0]);
 	} catch (error) {
@@ -80,6 +79,7 @@ wishlistsRoutes.delete('/:id', async (c) => {
 	try {
 		const client = new Pool({ connectionString: c.env.DATABASE_URL });
 		const db = drizzle(client);
+
 		const result = await db.delete(wishlists).where(eq(wishlists.id, c.req.param('id')));
 		return c.json('removed from wishlist');
 	} catch (error) {
