@@ -44,8 +44,10 @@ wishlistsRoutes.post('/', async (c) => {
 		const result = await db
 			.insert(wishlists)
 			.values({
+				id: '000-' + new Date().getTime(),
 				userId: userId,
 				roomId: roomId,
+				createdAt: new Date().toISOString(),
 			})
 			.returning();
 		c.status(201);

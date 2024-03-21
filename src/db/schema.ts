@@ -68,11 +68,11 @@ export const bookings = pgTable('bookings', {
 	createdAt: text('created_at').notNull(),
 });
 
-// export const insertWishlistSchema = createInsertSchema(wishlists);
+export const insertWishlistSchema = createInsertSchema(wishlists);
 export const insertUserSchema = createInsertSchema(users);
-// export const insertImagesSchema = createInsertSchema(images);
-// export const insertRoomsSchema = createInsertSchema(rooms);
-// export const insertBookingsSchema = createInsertSchema(bookings);
+export const insertImagesSchema = createInsertSchema(images);
+export const insertRoomsSchema = createInsertSchema(rooms);
+export const insertBookingsSchema = createInsertSchema(bookings);
 
 // export const wishlistRelations = relations(wishlists, ({ one, many }) => ({
 // 	user: one(users, { fields: [wishlists.userId], references: [users.id] }),

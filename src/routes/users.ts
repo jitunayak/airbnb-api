@@ -46,7 +46,7 @@ usersRoute.post('', async (c) => {
 		const { name, email, id } = insertUserSchema.parse(body);
 		const client = new Pool({ connectionString: c.env.DATABASE_URL });
 		const db = drizzle(client);
-		const result = await db.insert(users).values({ email, name, id }).returning();
+		const result = await db.insert(users).values({ createdAt: new Date().toISOString(), email, name, id }).returning();
 		return c.json(result[0]);
 	} catch (error) {
 		if (error instanceof ZodError) {

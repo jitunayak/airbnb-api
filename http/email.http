@@ -6,4 +6,5 @@ Content-Type: application/json
 {
     "email":"jitunayak715@gmail.com",
     "name":"Jitu Nayak",
+    "bookingId": "89923"
 }
