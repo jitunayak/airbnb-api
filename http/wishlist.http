@@ -11,7 +11,8 @@ POST {{host}}/api/v1/wishlists
 Content-Type: application/json
 
 {
-    "roomId": "13"
+    "userId": "{{userId}}",
+    "roomId": "14"
 }
 
 ### Get wishlists for a user

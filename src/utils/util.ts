@@ -1,7 +1,7 @@
 export const handlerError = (error: any) => {
 	console.log(error);
 	return {
-		statusCode: 400,
+		statusCode: error.status || 500,
 		body: JSON.stringify({
 			error,
 		}),

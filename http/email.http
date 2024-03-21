@@ -1,0 +1,9 @@
+@host= http://localhost:8787
+
+POST {{host}}/api/v1/emails?action=bookingConfirmation
+Content-Type: application/json
+
+{
+    "email":"jitunayak715@gmail.com",
+    "name":"Jitu Nayak",
+}

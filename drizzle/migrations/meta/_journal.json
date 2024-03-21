@@ -5,22 +5,8 @@
     {
       "idx": 0,
       "version": "5",
-      "when": 1710830975086,
-      "tag": "0000_wise_korath",
-      "breakpoints": true
-    },
-    {
-      "idx": 1,
-      "version": "5",
-      "when": 1710848691703,
-      "tag": "0001_careful_makkari",
-      "breakpoints": true
-    },
-    {
-      "idx": 2,
-      "version": "5",
-      "when": 1710875602108,
-      "tag": "0002_lame_mystique",
+      "when": 1711004623430,
+      "tag": "0000_early_selene",
       "breakpoints": true
     }
   ]
