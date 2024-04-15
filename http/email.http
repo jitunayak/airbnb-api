@@ -1,4 +1,5 @@
-@host= http://localhost:8787
+# @host= http://localhost:8787
+@host= https://aircnc.deno.dev
 
 POST {{host}}/api/v1/emails?action=bookingConfirmation
 Content-Type: application/json
