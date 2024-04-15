@@ -1,6 +1,6 @@
-import { InferSelectModel } from 'drizzle-orm';
-import { pgTable, text } from 'drizzle-orm/pg-core';
-import { createInsertSchema } from 'drizzle-zod';
+import { InferSelectModel } from 'npm:drizzle-orm';
+import { pgTable, text } from 'npm:drizzle-orm/pg-core';
+import { createInsertSchema } from 'npm:drizzle-zod';
 
 export const users = pgTable('users', {
 	id: text('id').primaryKey(),

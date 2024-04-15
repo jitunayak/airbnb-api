@@ -1,5 +1,5 @@
-import { Hono } from 'hono';
 import { config } from 'https://deno.land/x/dotenv@v3.1.0/mod.ts';
+import { Hono } from 'npm:hono';
 import { emailsRoute, usersRoute, wishlistsRoutes } from './routes/index.ts';
 
 config({ export: true });

@@ -1,7 +1,7 @@
-import { Pool } from '@neondatabase/serverless';
-import { eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import { Hono } from 'hono';
+import { Pool } from 'npm:@neondatabase/serverless';
+import { eq } from 'npm:drizzle-orm';
+import { drizzle } from 'npm:drizzle-orm/neon-serverless';
+import { Hono } from 'npm:hono';
 import { ZodError } from 'npm:zod';
 import { insertUserSchema, users, wishlists } from '../db/schema.ts';
 // import { kindeClient } from '../utils/authUtils';

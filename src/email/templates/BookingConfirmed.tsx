@@ -1,5 +1,5 @@
-import { Body, Container, Heading, Hr, Preview, Section, Tailwind, Text } from '@react-email/components';
 import { Button } from 'npm:@react-email/button';
+import { Body, Container, Heading, Hr, Preview, Section, Tailwind, Text } from 'npm:@react-email/components';
 import { Html } from 'npm:@react-email/html';
 import * as React from 'npm:react';
 

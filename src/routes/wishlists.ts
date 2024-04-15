@@ -1,8 +1,8 @@
-import { Pool } from '@neondatabase/serverless';
-import { and, eq } from 'drizzle-orm';
-import { drizzle } from 'drizzle-orm/neon-serverless';
-import { Hono } from 'hono';
-import { HTTPException } from 'hono/http-exception';
+import { Pool } from 'npm:@neondatabase/serverless';
+import { and, eq } from 'npm:drizzle-orm';
+import { drizzle } from 'npm:drizzle-orm/neon-serverless';
+import { Hono } from 'npm:hono';
+import { HTTPException } from 'npm:hono/http-exception';
 import { ZodError } from 'npm:zod';
 import { insertWishlistSchema, wishlists } from '../db/schema.ts';
 import { Env } from '../index.ts';

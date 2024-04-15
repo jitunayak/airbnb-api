@@ -1,5 +1,5 @@
-import { Hono } from 'hono';
-import { HTTPException } from 'hono/http-exception';
+import { Hono } from 'npm:hono';
+import { HTTPException } from 'npm:hono/http-exception';
 import { sendBookingConfirmationEmail } from '../email/bookingConfirmation.ts';
 import { Env } from '../index.ts';
 import { config } from '../utils/config.ts';
