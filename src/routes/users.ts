@@ -1,26 +1,24 @@
+import { Router } from 'https://deno.land/x/oak@v12.5.0/router.ts';
 import { Pool } from 'npm:@neondatabase/serverless';
 import { eq } from 'npm:drizzle-orm';
 import { drizzle } from 'npm:drizzle-orm/neon-serverless';
-import { Hono } from 'npm:hono';
 import { ZodError } from 'npm:zod';
 import { insertUserSchema, users, wishlists } from '../db/schema.ts';
-// import { kindeClient } from '../utils/authUtils';
-import { Env } from '../index.ts';
 import { config } from '../utils/config.ts';
 import { handlerError } from '../utils/util.ts';
 
-export const usersRoute = new Hono<{ Bindings: Env }>();
+export const usersRoute = new Router({ prefix: '/api/v1/users' });
 
-usersRoute.get('', async (c) => {
+usersRoute.get('/', async (c) => {
 	try {
 		// kindeClient.getUserDetails(c.req);
 		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
 		const result = await db.select().from(users);
-		return c.json({
+		c.response.body = {
 			count: result.length,
 			data: result,
-		});
+		};
 	} catch (error) {
 		handlerError(error);
 	}
@@ -30,14 +28,12 @@ usersRoute.get('/:id', async (c) => {
 	try {
 		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
-		const result = await db
-			.select()
-			.from(users)
-			.where(eq(users.id, c.req.param('id')));
+		const result = await db.select().from(users).where(eq(users.id, c.params.id));
 		if (result.length === 0) {
-			return c.status(404);
+			c.throw(404, 'User not found');
 		}
-		return c.json(result[0]);
+		c.response.body = result[0];
+		return;
 	} catch (error) {
 		handlerError(error);
 	}
@@ -45,15 +41,18 @@ usersRoute.get('/:id', async (c) => {
 
 usersRoute.post('', async (c) => {
 	try {
-		const body = await c.req.json();
+		const body = await c.request.body().value;
 		const { name, email, id } = insertUserSchema.parse(body);
 		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
 		const result = await db.insert(users).values({ createdAt: new Date().toISOString(), email, name, id }).returning();
-		return c.json(result[0]);
+		c.response.body = result[0];
+		return;
 	} catch (error) {
 		if (error instanceof ZodError) {
-			return c.json({ error: error.issues });
+			c.response.body = JSON.stringify({ error: error.issues });
+			c.response.status = 400;
+			return;
 		}
 		handlerError(error);
 	}
@@ -63,14 +62,12 @@ usersRoute.get('/:id/wishlists', async (c) => {
 	try {
 		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
-		const wishLists = await db
-			.select()
-			.from(wishlists)
-			.where(eq(wishlists.userId, c.req.param('id')));
-		return c.json({
+		const wishLists = await db.select().from(wishlists).where(eq(wishlists.userId, c.params.id));
+		c.response.body = {
 			count: wishLists.length,
 			data: wishLists,
-		});
+		};
+		return;
 	} catch (error) {
 		handlerError(error);
 	}

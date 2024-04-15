@@ -1,7 +1,7 @@
+import { Router } from 'https://deno.land/x/oak@v12.5.0/router.ts';
 import { Pool } from 'npm:@neondatabase/serverless';
 import { and, eq } from 'npm:drizzle-orm';
 import { drizzle } from 'npm:drizzle-orm/neon-serverless';
-import { Hono } from 'npm:hono';
 import { HTTPException } from 'npm:hono/http-exception';
 import { ZodError } from 'npm:zod';
 import { insertWishlistSchema, wishlists } from '../db/schema.ts';
@@ -9,17 +9,17 @@ import { Env } from '../index.ts';
 import { config } from '../utils/config.ts';
 import { handlerError } from '../utils/util.ts';
 
-export const wishlistsRoutes = new Hono<{ Bindings: Env }>();
+export const wishlistsRoutes = new Router<{ Bindings: Env }>({ prefix: '/api/v1/wishlists' });
 
 wishlistsRoutes.get('/', async (c) => {
 	try {
 		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
 		const result = await db.select().from(wishlists);
-		return c.json({
+		c.response.body = {
 			count: result.length,
 			data: result,
-		});
+		};
 	} catch (error) {
 		handlerError(error);
 	}
@@ -27,7 +27,7 @@ wishlistsRoutes.get('/', async (c) => {
 
 wishlistsRoutes.post('/', async (c) => {
 	try {
-		const body = await c.req.json();
+		const body = c.request.body().value;
 		const { userId, roomId } = insertWishlistSchema.parse(body);
 		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
@@ -51,11 +51,13 @@ wishlistsRoutes.post('/', async (c) => {
 				createdAt: new Date().toISOString(),
 			})
 			.returning();
-		c.status(201);
-		return c.json(result[0]);
+		c.response.body = result[0];
+		c.response.status = 201;
+		return;
 	} catch (error) {
 		if (error instanceof ZodError) {
-			return c.json({ error: error.issues });
+			c.response.body = JSON.stringify({ error: error.issues });
+			return;
 		}
 		handlerError(error);
 	}
@@ -65,14 +67,12 @@ wishlistsRoutes.get('/:id', async (c) => {
 	try {
 		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
-		const result = await db
-			.select()
-			.from(wishlists)
-			.where(eq(wishlists.id, c.req.param('id')));
+		const result = await db.select().from(wishlists).where(eq(wishlists.id, c.params.id));
 		if (result.length === 0) {
 			throw new HTTPException(404, { message: 'Not found' });
 		}
-		return c.json(result[0]);
+		c.response.body = result[0];
+		return;
 	} catch (error) {
 		handlerError(error);
 	}
@@ -82,9 +82,10 @@ wishlistsRoutes.delete('/:id', async (c) => {
 	try {
 		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
-
-		const result = await db.delete(wishlists).where(eq(wishlists.id, c.req.param('id')));
-		return c.json('removed from wishlist');
+		const result = await db.delete(wishlists).where(eq(wishlists.id, c.params.id));
+		console.log(result);
+		c.response.body = 'removed from wishlists';
+		return;
 	} catch (error) {
 		handlerError(error);
 	}
