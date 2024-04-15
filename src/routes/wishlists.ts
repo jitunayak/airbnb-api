@@ -3,16 +3,17 @@ import { and, eq } from 'drizzle-orm';
 import { drizzle } from 'drizzle-orm/neon-serverless';
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import { ZodError } from 'zod';
-import { Env } from '..';
-import { insertWishlistSchema, wishlists } from '../db/schema';
-import { handlerError } from '../utils/util';
+import { ZodError } from 'npm:zod';
+import { insertWishlistSchema, wishlists } from '../db/schema.ts';
+import { Env } from '../index.ts';
+import { config } from '../utils/config.ts';
+import { handlerError } from '../utils/util.ts';
 
 export const wishlistsRoutes = new Hono<{ Bindings: Env }>();
 
 wishlistsRoutes.get('/', async (c) => {
 	try {
-		const client = new Pool({ connectionString: c.env.DATABASE_URL });
+		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
 		const result = await db.select().from(wishlists);
 		return c.json({
@@ -28,7 +29,7 @@ wishlistsRoutes.post('/', async (c) => {
 	try {
 		const body = await c.req.json();
 		const { userId, roomId } = insertWishlistSchema.parse(body);
-		const client = new Pool({ connectionString: c.env.DATABASE_URL });
+		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
 
 		// check if user exists
@@ -62,7 +63,7 @@ wishlistsRoutes.post('/', async (c) => {
 
 wishlistsRoutes.get('/:id', async (c) => {
 	try {
-		const client = new Pool({ connectionString: c.env.DATABASE_URL });
+		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
 		const result = await db
 			.select()
@@ -79,7 +80,7 @@ wishlistsRoutes.get('/:id', async (c) => {
 
 wishlistsRoutes.delete('/:id', async (c) => {
 	try {
-		const client = new Pool({ connectionString: c.env.DATABASE_URL });
+		const client = new Pool({ connectionString: config.DATABASE_URL });
 		const db = drizzle(client);
 
 		const result = await db.delete(wishlists).where(eq(wishlists.id, c.req.param('id')));

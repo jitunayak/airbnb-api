@@ -1,7 +1,8 @@
 import { Hono } from 'hono';
 import { HTTPException } from 'hono/http-exception';
-import { Env } from '..';
-import { sendBookingConfirmationEmail } from '../email/bookingConfirmation';
+import { sendBookingConfirmationEmail } from '../email/bookingConfirmation.ts';
+import { Env } from '../index.ts';
+import { config } from '../utils/config.ts';
 
 export const emailsRoute = new Hono<{ Bindings: Env }>();
 
@@ -13,7 +14,7 @@ emailsRoute.post('/', async (c) => {
 		const result = await sendBookingConfirmationEmail({
 			to: email,
 			name: name,
-			apiKey: c.env.EMAIL_API_KEY,
+			apiKey: config.EMAIL_API_KEY,
 			bookingId: '33423111',
 		});
 		return c.json({

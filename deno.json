@@ -1,0 +1,11 @@
+{
+  "tasks": {
+    "dev": "deno run --watch -A ./src/index.ts -- api",
+    "serve": "deno run -A ./src/index.ts -- api",
+    "db:generate": "drizzle-kit generate:pg --schema ./src/db/schema.ts --out=./drizzle/migrations",
+    "db:migrate": "tsx ./drizzle/migrate.ts",
+    "db:seed": "tsx ./drizzle/seed.ts",
+    "db:studio": "drizzle-kit studio --port 3000 --verbose",
+    "email:dev": "email dev"
+  }
+}

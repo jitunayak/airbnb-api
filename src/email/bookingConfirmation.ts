@@ -1,7 +1,7 @@
 import { Resend } from 'resend';
-import BookingConfirmed from './templates/BookingConfirmed';
+import BookingConfirmed from './templates/BookingConfirmed.tsx';
 
-export const sendBookingConfirmationEmail = async ({
+export const sendBookingConfirmationEmail = ({
 	to,
 	name,
 	apiKey,
