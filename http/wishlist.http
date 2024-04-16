@@ -1,6 +1,7 @@
 # @host= http://localhost:8787
 @host= https://aircnc.deno.dev
 @userId=fada82b0-3101-42d3-9b7b-0b7b386a4c78
+@token= {{$dotenv JWT_TOKEN}}
 
 ### get all wishlists
 GET {{host}}/api/v1/wishlists
@@ -10,6 +11,7 @@ GET {{host}}/api/v1/wishlists
 # @name createWishlist
 POST {{host}}/api/v1/wishlists
 Content-Type: application/json
+Authorization:Bearer {{token}}
 
 {
     "userId": "{{userId}}",
@@ -18,3 +20,4 @@ Content-Type: application/json
 
 ### Get wishlists for a user
 GET {{host}}/api/v1/wishlists/{{createWishlist.response.body.id}}
+Authorization:Bearer {{token}}
