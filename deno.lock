@@ -23,6 +23,7 @@
       "npm:@upstash/ratelimit": "npm:@upstash/ratelimit@1.1.1",
       "npm:@upstash/redis": "npm:@upstash/redis@1.29.0",
       "npm:@xata.io/client@latest": "npm:@xata.io/client@0.29.4_typescript@5.4.5",
+      "npm:dotenv": "npm:dotenv@16.4.5",
       "npm:drizzle-orm": "npm:drizzle-orm@0.30.8_@neondatabase+serverless@0.9.0_react@18.2.0",
       "npm:drizzle-zod": "npm:drizzle-zod@0.5.1_drizzle-orm@0.30.8__@neondatabase+serverless@0.9.0__react@18.2.0_zod@3.22.4_@neondatabase+serverless@0.9.0_react@18.2.0",
       "npm:express@4.18.2": "npm:express@4.18.2",
@@ -919,6 +920,10 @@
           "domelementtype": "domelementtype@2.3.0",
           "domhandler": "domhandler@5.0.3"
         }
+      },
+      "dotenv@16.4.5": {
+        "integrity": "sha512-ZmdL2rui+eB2YwhsWzjInR8LldtZHGDoQ1ugH85ppHKwpUHL7j7rN0Ti9NCnGiQbhaZ11FpR+7ao1dNsmduNUg==",
+        "dependencies": {}
       },
       "drizzle-orm@0.30.8_@neondatabase+serverless@0.9.0_react@18.2.0": {
         "integrity": "sha512-9pBJA0IjnpPpzZ6s9jlS1CQAbKoBmbn2GJesPhXaVblAA/joOJ4AWWevYcqvLGj9SvThBAl7WscN8Zwgg5mnTw==",
