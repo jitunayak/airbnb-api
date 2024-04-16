@@ -1,5 +1,5 @@
-# @host= http://localhost:8787
-@host= https://aircnc.deno.dev
+@host= http://localhost:8787
+# @host= https://aircnc.deno.dev
 @userId=fada82b0-3101-42d3-9b7b-0b7b386a4c78
 @token= {{$dotenv JWT_TOKEN}}
 ### Get All users

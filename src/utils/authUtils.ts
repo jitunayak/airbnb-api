@@ -20,8 +20,8 @@ let authPayload: AccessPayload = {
 };
 
 export const verifyToken: Middleware = async (ctx: Context, next: Next) => {
-	// get the bearer token
 	try {
+		// get the bearer token
 		const jwt = ctx.request.headers.get('Authorization')?.split(' ')[1];
 		// console.log({ jwt });
 		if (!jwt) {
