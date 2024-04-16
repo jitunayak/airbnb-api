@@ -20,6 +20,8 @@
       "npm:@react-email/components": "npm:@react-email/components@0.0.16_react@18.2.0",
       "npm:@react-email/html": "npm:@react-email/html@0.0.7_react@18.2.0",
       "npm:@types/node": "npm:@types/node@18.16.19",
+      "npm:@upstash/ratelimit": "npm:@upstash/ratelimit@1.1.1",
+      "npm:@upstash/redis": "npm:@upstash/redis@1.29.0",
       "npm:@xata.io/client@latest": "npm:@xata.io/client@0.29.4_typescript@5.4.5",
       "npm:drizzle-orm": "npm:drizzle-orm@0.30.8_@neondatabase+serverless@0.9.0_react@18.2.0",
       "npm:drizzle-zod": "npm:drizzle-zod@0.5.1_drizzle-orm@0.30.8__@neondatabase+serverless@0.9.0__react@18.2.0_zod@3.22.4_@neondatabase+serverless@0.9.0_react@18.2.0",
@@ -582,6 +584,24 @@
           "@types/send": "@types/send@0.17.4"
         }
       },
+      "@upstash/core-analytics@0.0.7": {
+        "integrity": "sha512-lC2j5efqb1haX/fpTGaPUx1rue1WUkOZBVHDzCB7eMIVsRdFFp4xiHtyH/G9omiR1zj39fU5SCTWFiKJH3KOpw==",
+        "dependencies": {
+          "@upstash/redis": "@upstash/redis@1.29.0"
+        }
+      },
+      "@upstash/ratelimit@1.1.1": {
+        "integrity": "sha512-e9xnKkHOYzOoqt5eH5bCB90UslkW/sKcKaDwcd07QZ40lkAPHE8DEuzgZwXuKfuywWp8XDE/c6HwDXcsTsNfww==",
+        "dependencies": {
+          "@upstash/core-analytics": "@upstash/core-analytics@0.0.7"
+        }
+      },
+      "@upstash/redis@1.29.0": {
+        "integrity": "sha512-kbO5fgMAeUzErnA/SOtaSbAa0dguYhhBT4MZHJ1O8gVl4iK754aC9+rIYY5hsp4nlxeCGfnIDkWpof991c9jjA==",
+        "dependencies": {
+          "crypto-js": "crypto-js@4.2.0"
+        }
+      },
       "@xata.io/client@0.29.4_typescript@5.4.5": {
         "integrity": "sha512-dRff4E/wINr0SYIlOHwApo0h8jzpAHVf2RcbGMkK9Xrddbe90KmCEx/gue9hLhBOoCCp6qUht2h9BsuVPruymw==",
         "dependencies": {
@@ -833,6 +853,10 @@
           "shebang-command": "shebang-command@2.0.0",
           "which": "which@2.0.2"
         }
+      },
+      "crypto-js@4.2.0": {
+        "integrity": "sha512-KALDyEYgpY+Rlob/iriUtjV6d5Eq+Y191A5g4UqLAi8CyGP9N1+FdVbkc1SxKc2r4YAYqG8JzO2KGL+AizD70Q==",
+        "dependencies": {}
       },
       "debug@2.6.9": {
         "integrity": "sha512-bC7ElrdJaJnPbAP+1EotYvqZsb3ecl5wi6Bfi6BJTUcNowp6cvspg0jXznRTKDjm/E7AdgFBVeAPVMNcKGsHMA==",

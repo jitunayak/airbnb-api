@@ -5,6 +5,7 @@ import { Context } from 'https://deno.land/x/oak@v12.5.0/context.ts';
 import { Middleware, Next } from 'https://deno.land/x/oak@v12.5.0/middleware.ts';
 import { AccessPayload, IPermission } from '../types/common.ts';
 import { env } from './config.ts';
+import { handlerError } from './util.ts';
 
 function findJWKByKeyId(jwks: any, kid: string) {
 	return jwks.keys.find(function (x: string) {
@@ -22,6 +23,7 @@ export const verifyToken: Middleware = async (ctx: Context, next: Next) => {
 	// get the bearer token
 	try {
 		const jwt = ctx.request.headers.get('Authorization')?.split(' ')[1];
+		// console.log({ jwt });
 		if (!jwt) {
 			throw createHttpError(400, 'Missing authorization header');
 		}
@@ -38,8 +40,7 @@ export const verifyToken: Middleware = async (ctx: Context, next: Next) => {
 		console.log({ result });
 		await next();
 	} catch (error) {
-		console.log(error);
-		throw createHttpError(401, 'Unauthorized');
+		handlerError(ctx, error);
 	}
 };
 

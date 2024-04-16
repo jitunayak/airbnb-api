@@ -30,7 +30,7 @@ usersRoute.get('/:id', async (c) => {
 		c.response.body = result[0];
 		return;
 	} catch (error) {
-		handlerError(error);
+		handlerError(c, error);
 	}
 });
 
@@ -49,7 +49,7 @@ usersRoute.post('', async (c) => {
 			c.response.status = 400;
 			return;
 		}
-		handlerError(error);
+		handlerError(c, error);
 	}
 });
 
@@ -64,6 +64,6 @@ usersRoute.get('/:id/wishlists', async (c) => {
 		};
 		return;
 	} catch (error) {
-		handlerError(error);
+		handlerError(c, error);
 	}
 });

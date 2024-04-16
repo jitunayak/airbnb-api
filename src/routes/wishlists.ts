@@ -20,7 +20,7 @@ wishlistsRoutes.get('/', async (c) => {
 			data: result,
 		};
 	} catch (error) {
-		handlerError(error);
+		handlerError(c, error);
 	}
 });
 
@@ -58,7 +58,7 @@ wishlistsRoutes.post('/', async (c) => {
 			c.response.body = JSON.stringify({ error: error.issues });
 			return;
 		}
-		handlerError(error);
+		handlerError(c, error);
 	}
 });
 
@@ -73,7 +73,7 @@ wishlistsRoutes.get('/:id', async (c) => {
 		c.response.body = result[0];
 		return;
 	} catch (error) {
-		handlerError(error);
+		handlerError(c, error);
 	}
 });
 
@@ -86,6 +86,6 @@ wishlistsRoutes.delete('/:id', async (c) => {
 		c.response.body = 'removed from wishlists';
 		return;
 	} catch (error) {
-		handlerError(error);
+		handlerError(c, error);
 	}
 });

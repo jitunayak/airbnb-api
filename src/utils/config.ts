@@ -9,4 +9,6 @@ export const env = {
 	KINDE_SECRET: envFile['KINDE_SECRET'] || Deno.env.get('KINDE_SECRET') || '',
 	KINDE_CLIENT_ID: envFile['KINDE_CLIENT_ID'] || Deno.env.get('KINDE_CLIENT_ID') || '',
 	KINDE_DOMAIN: envFile['KINDE_DOMAIN'] || Deno.env.get('KINDE_DOMAIN') || '',
+	UPSTASH_TOKEN: envFile['UPSTASH_TOKEN'] || Deno.env.get('UPSTASH_TOKEN') || '',
+	UPSTASH_URL: envFile['UPSTASH_URL'] || Deno.env.get('UPSTASH_URL') || '',
 };

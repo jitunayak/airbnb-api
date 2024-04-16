@@ -2,6 +2,7 @@ import { config } from 'https://deno.land/x/dotenv@v3.1.0/mod.ts';
 import { Application } from 'https://deno.land/x/oak@v12.5.0/application.ts';
 import { emailsRoute, usersRoute, wishlistsRoutes } from './routes/index.ts';
 import { verifyToken } from './utils/authUtils.ts';
+import { rateLimiter } from './utils/rateLimiter.ts';
 
 config({ export: true });
 export type Env = {
@@ -13,6 +14,7 @@ const PORT = Deno.env.get('PORT') as unknown as number;
 const app = new Application();
 
 app.use(verifyToken);
+app.use(rateLimiter);
 app.use(wishlistsRoutes.routes());
 app.use(wishlistsRoutes.allowedMethods());
 
