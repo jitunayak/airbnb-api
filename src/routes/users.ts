@@ -10,13 +10,17 @@ import { handlerError } from '../utils/util.ts';
 export const usersRoute = new Router({ prefix: '/api/v1/users' });
 
 usersRoute.get('/', async (c) => {
-	const client = new Pool({ connectionString: env.DATABASE_URL });
-	const db = drizzle(client);
-	const result = await db.select().from(users);
-	c.response.body = {
-		count: result.length,
-		data: result,
-	};
+	try {
+		const client = new Pool({ connectionString: env.DATABASE_URL });
+		const db = drizzle(client);
+		const result = await db.select().from(users);
+		c.response.body = {
+			count: result.length,
+			data: result,
+		};
+	} catch (error) {
+		handlerError(c, error);
+	}
 });
 
 usersRoute.get('/:id', async (c) => {
