@@ -5,15 +5,14 @@ import { drizzle } from 'npm:drizzle-orm/neon-serverless';
 import { HTTPException } from 'npm:hono/http-exception';
 import { ZodError } from 'npm:zod';
 import { insertWishlistSchema, wishlists } from '../db/schema.ts';
-import { Env } from '../index.ts';
-import { config } from '../utils/config.ts';
+import { env } from '../utils/config.ts';
 import { handlerError } from '../utils/util.ts';
 
-export const wishlistsRoutes = new Router<{ Bindings: Env }>({ prefix: '/api/v1/wishlists' });
+export const wishlistsRoutes = new Router({ prefix: '/api/v1/wishlists' });
 
 wishlistsRoutes.get('/', async (c) => {
 	try {
-		const client = new Pool({ connectionString: config.DATABASE_URL });
+		const client = new Pool({ connectionString: env.DATABASE_URL });
 		const db = drizzle(client);
 		const result = await db.select().from(wishlists);
 		c.response.body = {
@@ -29,7 +28,7 @@ wishlistsRoutes.post('/', async (c) => {
 	try {
 		const body = c.request.body().value;
 		const { userId, roomId } = insertWishlistSchema.parse(body);
-		const client = new Pool({ connectionString: config.DATABASE_URL });
+		const client = new Pool({ connectionString: env.DATABASE_URL });
 		const db = drizzle(client);
 
 		// check if user exists
@@ -65,7 +64,7 @@ wishlistsRoutes.post('/', async (c) => {
 
 wishlistsRoutes.get('/:id', async (c) => {
 	try {
-		const client = new Pool({ connectionString: config.DATABASE_URL });
+		const client = new Pool({ connectionString: env.DATABASE_URL });
 		const db = drizzle(client);
 		const result = await db.select().from(wishlists).where(eq(wishlists.id, c.params.id));
 		if (result.length === 0) {
@@ -80,7 +79,7 @@ wishlistsRoutes.get('/:id', async (c) => {
 
 wishlistsRoutes.delete('/:id', async (c) => {
 	try {
-		const client = new Pool({ connectionString: config.DATABASE_URL });
+		const client = new Pool({ connectionString: env.DATABASE_URL });
 		const db = drizzle(client);
 		const result = await db.delete(wishlists).where(eq(wishlists.id, c.params.id));
 		console.log(result);

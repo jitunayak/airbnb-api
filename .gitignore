@@ -177,3 +177,5 @@ public
 .flaskenv*
 !.env.project
 !.env.vault
+
+.credentials.json

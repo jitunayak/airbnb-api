@@ -1,10 +1,9 @@
 import { Router } from 'https://deno.land/x/oak@v12.5.0/router.ts';
 import { HTTPException } from 'npm:hono/http-exception';
 import { sendBookingConfirmationEmail } from '../email/bookingConfirmation.ts';
-import { Env } from '../index.ts';
-import { config } from '../utils/config.ts';
+import { env } from '../utils/config.ts';
 
-export const emailsRoute = new Router<{ Bindings: Env }>({ prefix: '/api/v1/emails' });
+export const emailsRoute = new Router({ prefix: '/api/v1/emails' });
 
 emailsRoute.post('/', async (c) => {
 	const action = c.request.url.searchParams.get('action');
@@ -18,7 +17,7 @@ emailsRoute.post('/', async (c) => {
 		const result = await sendBookingConfirmationEmail({
 			to: email,
 			name: name,
-			apiKey: config.EMAIL_API_KEY,
+			apiKey: env.EMAIL_API_KEY,
 			bookingId: '33423111',
 		});
 		c.response.body = {
