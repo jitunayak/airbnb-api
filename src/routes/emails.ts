@@ -1,5 +1,5 @@
+import { createHttpError } from 'https://deno.land/std@0.188.0/http/http_errors.ts';
 import { Router } from 'https://deno.land/x/oak@v12.5.0/router.ts';
-import { HTTPException } from 'npm:hono/http-exception';
 import { sendBookingConfirmationEmail } from '../email/bookingConfirmation.ts';
 import { env } from '../utils/config.ts';
 
@@ -9,7 +9,7 @@ emailsRoute.post('/', async (c) => {
 	const action = c.request.url.searchParams.get('action');
 
 	if (!action) {
-		throw new HTTPException(400, { message: 'Missing action' });
+		throw createHttpError(400, 'Missing action');
 	}
 	if (action === 'bookingConfirmation') {
 		const body = await c.request.body().value;
@@ -18,7 +18,7 @@ emailsRoute.post('/', async (c) => {
 			to: email,
 			name: name,
 			apiKey: env.EMAIL_API_KEY,
-			bookingId: '33423111',
+			bookingId: bookingId,
 		});
 		c.response.body = {
 			message: 'Email sent successfully',
@@ -26,6 +26,6 @@ emailsRoute.post('/', async (c) => {
 		};
 		return;
 	} else {
-		throw new HTTPException(400, { message: 'Invalid action' });
+		throw createHttpError(400, 'Invalid action');
 	}
 });

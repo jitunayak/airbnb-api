@@ -3,15 +3,21 @@ import { Application } from 'https://deno.land/x/oak@v12.5.0/application.ts';
 import { emailsRoute, usersRoute, wishlistsRoutes } from './routes/index.ts';
 import { verifyToken } from './utils/authUtils.ts';
 import { rateLimiter } from './utils/rateLimiter.ts';
+import { handlerError } from './utils/util.ts';
 
 config({ export: true });
-export type Env = {
-	DATABASE_URL: string;
-	EMAIL_API_KEY: string;
-};
+
 const PORT = Deno.env.get('PORT') as unknown as number;
 
 const app = new Application();
+
+app.use(async (ctx, next) => {
+	try {
+		await next();
+	} catch (error) {
+		handlerError(ctx, error);
+	}
+});
 
 app.use(verifyToken);
 app.use(rateLimiter);

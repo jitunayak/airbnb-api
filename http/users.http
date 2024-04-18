@@ -11,4 +11,4 @@ Authorization:Bearer {{token}}
 
 ### Get wishlists of a user
 GET {{host}}/api/v1/users/{{userId}}/wishlists
-Authorization:Bearer {{token}}
+Authorization:Bearer {{token}
