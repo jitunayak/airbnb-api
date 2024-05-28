@@ -1,17 +1,15 @@
-const express = require('express');
-export const emailsRoute = express.Router();
+import { NextFunction, Request, Response, Router } from 'express';
+import { BadRequest } from 'http-errors';
+import { sendBookingConfirmationEmail } from '../email/bookingConfirmation';
+import { env } from '../utils/config';
 
-const { createHttpError } = require('http-errors');
-const { sendBookingConfirmationEmail } = require('../email/bookingConfirmation');
-const { env } = require('../utils/config');
+export const emailsRoute = Router();
 
-emailsRoute.post('/', async (req, res, next) => {
+emailsRoute.post('/', async (req: Request, res: Response, next: NextFunction) => {
 	const action = req.query.action;
-
 	if (!action) {
-		return next(createHttpError(400, 'Missing action'));
+		return next(BadRequest('Missing action'));
 	}
-
 	if (action === 'bookingConfirmation') {
 		const { name, email, bookingId } = req.body;
 		const result = await sendBookingConfirmationEmail({
@@ -28,5 +26,5 @@ emailsRoute.post('/', async (req, res, next) => {
 		return;
 	}
 
-	return next(createHttpError(400, 'Invalid action'));
+	return next(BadRequest('Invalid action'));
 });

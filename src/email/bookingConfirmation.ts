@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import BookingConfirmed from './templates/BookingConfirmed.tsx';
+import BookingConfirmed from './templates/BookingConfirmed';
 
 export const sendBookingConfirmationEmail = ({
 	to,

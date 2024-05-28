@@ -1,12 +1,12 @@
 import { and, eq } from 'drizzle-orm';
 import express from 'express';
-import * as createError from 'http-errors';
+import { Conflict, NotFound } from 'http-errors';
 import { ZodError } from 'zod';
 import { insertWishlistSchema, wishlists } from '../db/schema';
 import { buildResultResponse, getDbClient } from '../utils/util';
 const db = getDbClient();
 
-export const wishlistsRoute = express.Router({ prefix: '/api/v1/wishlists' });
+export const wishlistsRoute = express.Router();
 
 wishlistsRoute.get('/', async (req, res) => {
 	const result = await db.select().from(wishlists);
@@ -24,7 +24,7 @@ wishlistsRoute.post('/', async (req, res) => {
 			.where(and(eq(wishlists.userId, userId), eq(wishlists.roomId, roomId)));
 
 		if (alreadyWishlisted.length > 0) {
-			throw createError(409, { message: 'Already wishlisted' });
+			throw Conflict('Already wishlisted');
 		}
 
 		const result = await db
@@ -49,7 +49,7 @@ wishlistsRoute.post('/', async (req, res) => {
 wishlistsRoute.get('/:id', async (req, res) => {
 	const result = await db.select().from(wishlists).where(eq(wishlists.id, req.params.id));
 	if (result.length === 0) {
-		throw createError(404, { message: 'Not found' });
+		throw NotFound('Not found');
 	}
 	res.json(result[0]);
 });

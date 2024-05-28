@@ -11,7 +11,7 @@ app.use((req, res, next) => {
 	try {
 		next();
 	} catch (error) {
-		handlerError(req, res, error);
+		handlerError(req, res, error as Error);
 	}
 });
 

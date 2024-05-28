@@ -1,5 +1,5 @@
 import { Body, Button, Container, Heading, Hr, Html, Preview, Section, Tailwind, Text } from '@react-email/components';
-import * as React from 'react';
+// import * as React from 'react';
 
 interface IProps {
 	name: string;

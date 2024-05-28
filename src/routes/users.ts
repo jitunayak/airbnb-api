@@ -1,8 +1,8 @@
 import { eq } from 'drizzle-orm';
 import express from 'express';
 import { ZodError } from 'zod';
-import { insertUserSchema, users, wishlists } from '../db/schema.ts';
-import { buildResultResponse, getDbClient } from '../utils/util.ts';
+import { insertUserSchema, users, wishlists } from '../db/schema';
+import { buildResultResponse, getDbClient } from '../utils/util';
 
 export const usersRoute = express.Router();
 
