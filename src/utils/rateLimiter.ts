@@ -1,7 +1,7 @@
+import { Ratelimit } from ' @upstash/ratelimit';
+import { Redis } from ' @upstash/redis';
 import { createHttpError } from 'https://deno.land/std@0.188.0/http/http_errors.ts';
 import { Middleware } from 'https://deno.land/x/oak@v12.5.0/middleware.ts';
-import { Ratelimit } from 'npm:@upstash/ratelimit';
-import { Redis } from 'npm:@upstash/redis';
 import { env } from '../utils/config.ts';
 
 // Create a new ratelimiter, that allows 10 requests per 10 seconds

@@ -1,45 +1,44 @@
-import { Router } from 'https://deno.land/x/oak@v12.5.0/router.ts';
-import { eq } from 'npm:drizzle-orm';
-import { ZodError } from 'npm:zod';
+import { eq } from 'drizzle-orm';
+import express from 'express';
+import { ZodError } from 'zod';
 import { insertUserSchema, users, wishlists } from '../db/schema.ts';
 import { buildResultResponse, getDbClient } from '../utils/util.ts';
 
-export const usersRoute = new Router({ prefix: '/api/v1/users' });
+export const usersRoute = express.Router();
+
 const db = getDbClient();
 
-usersRoute.get('/', async (c) => {
+usersRoute.get('/', async (req, res) => {
 	const result = await db.select().from(users);
-	buildResultResponse(c, result);
+	res.json(buildResultResponse(result));
 });
 
-usersRoute.get('/:id', async (c) => {
-	const result = await db.select().from(users).where(eq(users.id, c.params.id));
+usersRoute.get('/:id', async (req, res) => {
+	const result = await db.select().from(users).where(eq(users.id, req.params.id));
 	if (result.length === 0) {
-		c.throw(404, 'User not found');
+		return res.status(404).send('User not found');
 	}
-	c.response.body = result[0];
-	return;
+	res.json(result[0]);
 });
 
-usersRoute.post('', async (c) => {
+usersRoute.post('', async (req, res) => {
 	try {
-		const body = await c.request.body().value;
+		const body = req.body;
 		const { name, email, id } = insertUserSchema.parse(body);
 		const result = await db.insert(users).values({ createdAt: new Date().toISOString(), email, name, id }).returning();
-		c.response.body = result[0];
-		return;
+		res.json(result[0]);
 	} catch (error) {
 		if (error instanceof ZodError) {
-			c.response.body = JSON.stringify({ error: error.issues });
-			c.response.status = 400;
+			res.status(400).json({ error: error.issues });
 			return;
 		}
 		throw error;
 	}
 });
 
-usersRoute.get('/:id/wishlists', async (c) => {
-	const wishLists = await db.select().from(wishlists).where(eq(wishlists.userId, c.params.id));
-	buildResultResponse(c, wishLists);
-	return;
+usersRoute.get('/:id/wishlists', async (req, res) => {
+	const wishLists = await db.select().from(wishlists).where(eq(wishlists.userId, req.params.id));
+	res.json(buildResultResponse(wishLists));
 });
+
+export default usersRoute;

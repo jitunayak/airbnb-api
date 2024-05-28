@@ -1,0 +1,32 @@
+{
+  "scripts": {
+    "dev": "tsx --watch ./src/index.ts",
+    "serve": "tsx ./src/index.ts",
+    "db:generate": "drizzle-kit generate",
+    "db:migrate": "tsx ./drizzle/migrate.ts",
+    "db:seed": "tsx ./drizzle/seed.ts",
+    "db:studio": "drizzle-kit studio --port 3000 --verbose",
+    "email:dev": "email dev",
+    "env:push": "npx dotenv-vault@latest push",
+    "env:pull": "npx dotenv-vault@latest pull",
+    "env:setup:local": "npx dotenv-vault@latest login",
+    "env:setup:ci": "npx dotenv-vault@latest keys development"
+  },
+  "devDependencies": {
+    "@types/node": "^20.12.12",
+    "dotenv": "^16.4.5",
+    "drizzle-kit": "^0.21.4",
+    "tsx": "^4.11.0"
+  },
+  "dependencies": {
+    "@neondatabase/serverless": "^0.9.3",
+    "@react-email/components": "^0.0.19",
+    "drizzle-orm": "^0.30.10",
+    "drizzle-zod": "^0.5.1",
+    "express": "^4.19.2",
+    "http-errors": "^2.0.0",
+    "react": "^18.3.1",
+    "resend": "^3.2.0",
+    "zod": "^3.23.8"
+  }
+}
