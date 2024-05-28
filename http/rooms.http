@@ -7,3 +7,7 @@
 ### Get all rooms
 GET {{host}}/api/v1/rooms
 Authorization: Bearer {{token}}
+
+### Get by room id
+GET {{host}}/api/v1/rooms/12345
+Authorization: Bearer {{token}}

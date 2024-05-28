@@ -6,6 +6,7 @@ export const users = pgTable('users', {
 	id: text('id').primaryKey(),
 	name: text('name'),
 	email: text('email').notNull().unique(),
+	pictureUrl: text('picture_url'),
 	createdAt: text('created_at').notNull(),
 });
 
@@ -108,9 +109,9 @@ export const insertBookingsSchema = createInsertSchema(bookings);
 // }));
 
 export const roomRelations = relations(rooms, ({ one, many }) => ({
-	// user: one(users, { fields: [rooms.userId], references: [users.id] }),
+	user: one(users, { fields: [rooms.userId], references: [users.id] }),
 	images: many(images),
-	prices: one(prices, { fields: [rooms.id], references: [prices.roomId] }),
+	price: one(prices, { fields: [rooms.id], references: [prices.roomId] }),
 	// bookings: many(bookings),
 	// wishlists: many(wishlists),
 }));
@@ -121,4 +122,8 @@ export const imageRelations = relations(images, ({ one }) => ({
 
 export const priceRelations = relations(prices, ({ one }) => ({
 	room: one(rooms, { fields: [prices.roomId], references: [rooms.id] }),
+}));
+
+export const userRelations = relations(users, ({ one, many }) => ({
+	rooms: many(rooms),
 }));

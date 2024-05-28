@@ -1,4 +1,8 @@
 {
+  "author": {
+    "name": "Jitu Nayak",
+    "url": "https://github.com/jitunayak"
+  },
   "scripts": {
     "dev": "tsx --watch ./src/index.ts",
     "serve": "tsx ./src/index.ts",

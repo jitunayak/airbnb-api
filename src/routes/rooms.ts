@@ -14,7 +14,7 @@ roomsRoute.get('/', async (req, res) => {
 		},
 		with: {
 			images: { columns: { roomId: false, createdAt: false } },
-			prices: {
+			price: {
 				columns: {
 					roomId: false,
 					createdAt: false,
@@ -27,11 +27,30 @@ roomsRoute.get('/', async (req, res) => {
 });
 
 roomsRoute.get('/:id', async (req, res) => {
-	const result = await db.select().from(rooms).where(eq(rooms.id, req.params.id));
-	if (result.length === 0) {
+	// const result = await db.select().from(rooms).where(eq(rooms.id, req.params.id));
+	const result = await db.query.rooms.findFirst({
+		where: eq(rooms.id, req.params.id),
+		columns: {
+			updatedAt: false,
+			createdAt: false,
+		},
+		with: {
+			user: true,
+			images: { columns: { roomId: false, createdAt: false } },
+			price: {
+				columns: {
+					roomId: false,
+					createdAt: false,
+					updatedAt: false,
+				},
+			},
+		},
+	});
+
+	if (result === null) {
 		res.status(404).send('Room not found');
 	}
-	res.json(result[0]);
+	res.json(result);
 });
 
 roomsRoute.get('/:id/images', async (req, res) => {
