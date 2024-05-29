@@ -1,3 +1,4 @@
-export * from './emails.ts';
-export * from './users.ts';
-export * from './wishlists.ts';
+export * from './emails';
+export * from './rooms';
+export * from './users';
+export * from './wishlists';

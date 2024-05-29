@@ -1,7 +1,10 @@
 @host= http://localhost:8787
+# @host=https://airbnb-api-jn.vercel.app
 # @host= https://aircnc.deno.dev
 @userId=fada82b0-3101-42d3-9b7b-0b7b386a4c78
 @token= {{$dotenv JWT_TOKEN}}
+
+
 ### Get All users
 GET {{host}}/api/v1/users
 Authorization:Bearer {{token}}
@@ -12,3 +15,5 @@ Authorization:Bearer {{token}}
 ### Get wishlists of a user
 GET {{host}}/api/v1/users/{{userId}}/wishlists
 Authorization:Bearer {{token}
+
+

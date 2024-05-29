@@ -1,6 +1,6 @@
 {
-  "id": "384a9e28-1903-44ab-99e7-82c5bf3fb582",
-  "prevId": "00000000-0000-0000-0000-000000000000",
+  "id": "48c0a0f0-de03-48a1-969d-9f1d6008860e",
+  "prevId": "384a9e28-1903-44ab-99e7-82c5bf3fb582",
   "version": "6",
   "dialect": "postgresql",
   "tables": {
@@ -109,7 +109,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -183,7 +183,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },
@@ -286,7 +286,7 @@
             "id"
           ],
           "onDelete": "cascade",
-          "onUpdate": "cascade"
+          "onUpdate": "no action"
         }
       },
       "compositePrimaryKeys": {},
@@ -313,6 +313,12 @@
           "type": "text",
           "primaryKey": false,
           "notNull": true
+        },
+        "picture_url": {
+          "name": "picture_url",
+          "type": "text",
+          "primaryKey": false,
+          "notNull": false
         },
         "created_at": {
           "name": "created_at",
@@ -375,7 +381,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         },
         "wishlist_user_id_users_id_fk": {
@@ -388,7 +394,7 @@
           "columnsTo": [
             "id"
           ],
-          "onDelete": "no action",
+          "onDelete": "cascade",
           "onUpdate": "no action"
         }
       },

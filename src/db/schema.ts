@@ -1,11 +1,12 @@
-import { InferSelectModel } from 'npm:drizzle-orm';
-import { pgTable, text } from 'npm:drizzle-orm/pg-core';
-import { createInsertSchema } from 'npm:drizzle-zod';
+import { InferSelectModel, relations } from 'drizzle-orm';
+import { decimal, pgTable, text } from 'drizzle-orm/pg-core';
+import { createInsertSchema } from 'drizzle-zod';
 
 export const users = pgTable('users', {
 	id: text('id').primaryKey(),
 	name: text('name'),
 	email: text('email').notNull().unique(),
+	pictureUrl: text('picture_url'),
 	createdAt: text('created_at').notNull(),
 });
 
@@ -14,17 +15,21 @@ export type User = InferSelectModel<typeof users>;
 export const rooms = pgTable('rooms', {
 	id: text('id').primaryKey(),
 	name: text('name').notNull(),
-	basePrice: text('base_price').notNull(),
-	currency: text('currency').notNull(),
 	description: text('description').notNull(),
 	userId: text('user_id')
 		.notNull()
 		.references(() => users.id, {
 			onDelete: 'cascade',
-			onUpdate: 'cascade',
 		}),
 	createdAt: text('created_at').notNull(),
 	updatedAt: text('updated_at').notNull(),
+	amenities: text('amenities').array().notNull(),
+	listingUrl: text('listing_url').notNull(),
+	thumbnail: text('thumbnail').notNull(),
+	rating: decimal('rating').notNull(),
+	summary: text('summary').notNull(),
+	propertyType: text('property_type').notNull(),
+	address: text('address').notNull(),
 });
 
 export type Room = InferSelectModel<typeof rooms>;
@@ -36,9 +41,25 @@ export type Room = InferSelectModel<typeof rooms>;
 // 	wishlists: many(wishlists),
 // }));
 
+export const prices = pgTable('prices', {
+	id: text('id').primaryKey(),
+	roomId: text('room_id')
+		.notNull()
+		.references(() => rooms.id, { onDelete: 'cascade' }),
+	createdAt: text('created_at').notNull(),
+	updatedAt: text('updated_at').notNull(),
+	discountedPrice: decimal('discounted_price').notNull(),
+	originalPrice: decimal('original_price').notNull(),
+	serviceCharge: decimal('service_charge').notNull(),
+});
+
+export type Price = InferSelectModel<typeof prices>;
+
 export const images = pgTable('images', {
 	id: text('id').primaryKey(),
-	roomId: text('room_id').notNull(),
+	roomId: text('room_id')
+		.notNull()
+		.references(() => rooms.id, { onDelete: 'cascade' }),
 	url: text('url').notNull().unique(),
 	createdAt: text('created_at').notNull(),
 });
@@ -49,10 +70,12 @@ export const wishlists = pgTable('wishlist', {
 	id: text('id').primaryKey(),
 	roomId: text('room_id')
 		.notNull()
-		.references(() => rooms.id),
+		.references(() => rooms.id, {
+			onDelete: 'cascade',
+		}),
 	userId: text('user_id')
 		.notNull()
-		.references(() => users.id),
+		.references(() => users.id, { onDelete: 'cascade' }),
 	createdAt: text('created_at').notNull(),
 });
 
@@ -85,9 +108,22 @@ export const insertBookingsSchema = createInsertSchema(bookings);
 // 	bookings: many(bookings),
 // }));
 
-// export const roomRelations = relations(rooms, ({ one, many }) => ({
-// 	user: one(users, { fields: [rooms.userId], references: [users.id] }),
-// 	images: many(images),
-// 	bookings: many(bookings),
-// 	wishlists: many(wishlists),
-// }));
+export const roomRelations = relations(rooms, ({ one, many }) => ({
+	user: one(users, { fields: [rooms.userId], references: [users.id] }),
+	images: many(images),
+	price: one(prices, { fields: [rooms.id], references: [prices.roomId] }),
+	// bookings: many(bookings),
+	// wishlists: many(wishlists),
+}));
+
+export const imageRelations = relations(images, ({ one }) => ({
+	room: one(rooms, { fields: [images.roomId], references: [rooms.id] }),
+}));
+
+export const priceRelations = relations(prices, ({ one }) => ({
+	room: one(rooms, { fields: [prices.roomId], references: [rooms.id] }),
+}));
+
+export const userRelations = relations(users, ({ one, many }) => ({
+	rooms: many(rooms),
+}));

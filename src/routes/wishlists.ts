@@ -1,21 +1,21 @@
-import { Router } from 'https://deno.land/x/oak@v12.5.0/router.ts';
-import { and, eq } from 'npm:drizzle-orm';
-import { HTTPException } from 'npm:hono/http-exception';
-import { ZodError } from 'npm:zod';
-import { insertWishlistSchema, wishlists } from '../db/schema.ts';
-import { buildResultResponse, getDbClient } from '../utils/util.ts';
-
-export const wishlistsRoutes = new Router({ prefix: '/api/v1/wishlists' });
+import { and, eq } from 'drizzle-orm';
+import express from 'express';
+import { Conflict, NotFound } from 'http-errors';
+import { ZodError } from 'zod';
+import { insertWishlistSchema, wishlists } from '../db/schema';
+import { buildResultResponse, getDbClient } from '../utils/util';
 const db = getDbClient();
 
-wishlistsRoutes.get('/', async (c) => {
+export const wishlistsRoute = express.Router();
+
+wishlistsRoute.get('/', async (req, res) => {
 	const result = await db.select().from(wishlists);
-	buildResultResponse(c, result);
+	res.json(buildResultResponse(result));
 });
 
-wishlistsRoutes.post('/', async (c) => {
+wishlistsRoute.post('/', async (req, res) => {
 	try {
-		const body = c.request.body().value;
+		const body = req.body;
 		const { userId, roomId } = insertWishlistSchema.parse(body);
 		// check if user exists
 		const alreadyWishlisted = await db
@@ -24,7 +24,7 @@ wishlistsRoutes.post('/', async (c) => {
 			.where(and(eq(wishlists.userId, userId), eq(wishlists.roomId, roomId)));
 
 		if (alreadyWishlisted.length > 0) {
-			throw new HTTPException(409, { message: 'Already wishlisted' });
+			throw Conflict('Already wishlisted');
 		}
 
 		const result = await db
@@ -36,30 +36,26 @@ wishlistsRoutes.post('/', async (c) => {
 				createdAt: new Date().toISOString(),
 			})
 			.returning();
-		c.response.body = result[0];
-		c.response.status = 201;
-		return;
+		res.status(201).json(result[0]);
 	} catch (error) {
 		if (error instanceof ZodError) {
-			c.response.body = JSON.stringify({ error: error.issues });
+			res.status(400).json({ error: error.issues });
 			return;
 		}
 		throw error;
 	}
 });
 
-wishlistsRoutes.get('/:id', async (c) => {
-	const result = await db.select().from(wishlists).where(eq(wishlists.id, c.params.id));
+wishlistsRoute.get('/:id', async (req, res) => {
+	const result = await db.select().from(wishlists).where(eq(wishlists.id, req.params.id));
 	if (result.length === 0) {
-		throw new HTTPException(404, { message: 'Not found' });
+		throw NotFound('Not found');
 	}
-	c.response.body = result[0];
-	return;
+	res.json(result[0]);
 });
 
-wishlistsRoutes.delete('/:id', async (c) => {
-	const result = await db.delete(wishlists).where(eq(wishlists.id, c.params.id));
+wishlistsRoute.delete('/:id', async (req, res) => {
+	const result = await db.delete(wishlists).where(eq(wishlists.id, req.params.id));
 	console.log(result);
-	c.response.body = 'removed from wishlists';
-	return;
+	res.json('removed from wishlists');
 });

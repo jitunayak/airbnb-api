@@ -2,9 +2,11 @@ import { neon } from '@neondatabase/serverless';
 import { config } from 'dotenv';
 import { drizzle } from 'drizzle-orm/neon-http';
 import { migrate } from 'drizzle-orm/neon-http/migrator';
-config({ path: '.dev.vars' });
-const sql = neon(process.env.DATABASE_URL as string);
+// config({ path: '.dev.vars' });
 
+config();
+
+const sql = neon(process.env.DATABASE_URL as string);
 const db = drizzle(sql);
 
 const main = async () => {
