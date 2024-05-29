@@ -1,5 +1,5 @@
 import { Resend } from 'resend';
-import BookingConfirmed from './templates/BookingConfirmed';
+// import BookingConfirmed from './templates/BookingConfirmed';
 
 export const sendBookingConfirmationEmail = ({
 	to,
@@ -18,6 +18,7 @@ export const sendBookingConfirmationEmail = ({
 		from: 'onboarding@resend.dev',
 		to: to,
 		subject: 'Airbnb booking confirmation',
-		react: BookingConfirmed({ name: name, url: 'https://aircnc-jitunayak.vercel.app', bookingId: bookingId }),
+		html: `Your booking has been confirmed with aircnc. We wait to onboard you soon!`,
+		// react: BookingConfirmed({ name: name, url: 'https://aircnc-jitunayak.vercel.app', bookingId: bookingId }),
 	});
 };

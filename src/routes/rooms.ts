@@ -35,7 +35,7 @@ roomsRoute.get('/:id', async (req, res) => {
 			createdAt: false,
 		},
 		with: {
-			user: true,
+			user: { columns: { createdAt: false } },
 			images: { columns: { roomId: false, createdAt: false } },
 			price: {
 				columns: {
