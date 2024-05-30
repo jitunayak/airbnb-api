@@ -1,11 +1,12 @@
 import { NextFunction, Request, Response, Router } from 'express';
 import { BadRequest } from 'http-errors';
 import { sendBookingConfirmationEmail } from '../email/bookingConfirmation';
+import { verifyToken } from '../utils/authUtils';
 import { env } from '../utils/config';
 
 export const emailsRoute = Router();
 
-emailsRoute.post('/', async (req: Request, res: Response, next: NextFunction) => {
+emailsRoute.post('/', verifyToken, async (req: Request, res: Response, next: NextFunction) => {
 	const action = req.query.action;
 	if (!action) {
 		return next(BadRequest('Missing action'));

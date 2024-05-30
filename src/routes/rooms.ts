@@ -22,6 +22,8 @@ roomsRoute.get('/', async (req, res) => {
 				},
 			},
 		},
+		offset: req.query.offset ? Number(req.query.offset) : 0,
+		limit: req.query.limit ? Number(req.query.limit) : 10,
 	});
 	res.json(result);
 });
