@@ -15,6 +15,13 @@
       "when": 1716901453207,
       "tag": "0001_dusty_loners",
       "breakpoints": true
+    },
+    {
+      "idx": 2,
+      "version": "6",
+      "when": 1717004933576,
+      "tag": "0002_real_shooting_star",
+      "breakpoints": true
     }
   ]
 }

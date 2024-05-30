@@ -11,12 +11,15 @@ emailsRoute.post('/', async (req: Request, res: Response, next: NextFunction) =>
 		return next(BadRequest('Missing action'));
 	}
 	if (action === 'bookingConfirmation') {
-		const { name, email, bookingId } = req.body;
+		console.log(req.body);
+		const { name, email, bookingId, checkInDate, checkOutDate } = req.body;
 		const result = await sendBookingConfirmationEmail({
 			to: email,
 			name,
 			apiKey: env.EMAIL_API_KEY,
 			bookingId,
+			checkInDate,
+			checkOutDate,
 		});
 
 		res.json({
