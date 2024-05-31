@@ -9,7 +9,7 @@ Authorization:Bearer {{token}}
 {
     "email":"jitunayak715@gmail.com",
     "name":"Jitu Nayak",
-    "bookingId":"89923",
+    "bookingId":"89923",    
     "checkInDate":"22/05/2024",
 	"checkOutDate":"24/05/2024"
 }

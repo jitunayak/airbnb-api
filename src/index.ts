@@ -15,7 +15,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(cors({ origin: '*', allowedHeaders: ['Content-Type', 'Authorization'] }));
+app.use(cors({ origin: ['https://aircnc-jitunayak.vercel.app', 'http://localhost:3000'] }));
 
 app.get('/', (req, res) => res.send('Airbnb API is running 🔥'));
 // app.use(verifyToken);
