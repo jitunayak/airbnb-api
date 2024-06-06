@@ -1,7 +1,11 @@
 import { eq } from 'drizzle-orm';
 import express from 'express';
-import { images, rooms } from '../db/schema';
+import { ZodError } from 'zod';
+import { IRoom, images, prices, rooms } from '../db/schema';
+import { IRoomInputSchema } from '../schemas/RoomSchema';
+import { verifyToken } from '../utils/authUtils';
 import { getDbClient } from './../utils/util';
+
 export const roomsRoute = express.Router();
 const db = getDbClient();
 
@@ -61,4 +65,68 @@ roomsRoute.get('/:id/images', async (req, res) => {
 		res.status(404).send('Room not found');
 	}
 	res.json(result);
+});
+
+roomsRoute.post('/', verifyToken, async (req, res) => {
+	try {
+		const body = req.body;
+
+		if (!body) {
+			throw new Error('Body is empty');
+		}
+		const roomInput = IRoomInputSchema.parse(body);
+		const { name, description, address, price, userId, images: listingImages, propertyType, amenities, summary } = roomInput;
+		const room: IRoom = {
+			address,
+			name,
+			description,
+			userId,
+			amenities,
+			listingUrl: '',
+			thumbnail: '',
+			rating: '5.0',
+			createdAt: new Date().toISOString(),
+			summary,
+			id: crypto.randomUUID(),
+			updatedAt: new Date().toISOString(),
+			propertyType,
+		};
+		const roomRecord = (await db.insert(rooms).values(room).returning()).at(0);
+
+		if (!roomRecord) {
+			throw new Error('Room not created');
+		}
+
+		const priceRecord = await db.insert(prices).values({
+			originalPrice: price,
+			discountedPrice: price,
+			serviceCharge: String(Number(price) * 0.1),
+			roomId: roomRecord.id,
+			createdAt: new Date().toISOString(),
+			updatedAt: new Date().toISOString(),
+			id: crypto.randomUUID(),
+		});
+
+		if (!priceRecord) {
+			throw new Error('Price not created');
+		}
+
+		for (const image of listingImages) {
+			await db.insert(images).values({
+				roomId: roomRecord.id,
+				url: image,
+				createdAt: new Date().toISOString(),
+				id: crypto.randomUUID(),
+			});
+		}
+
+		return res.json(roomRecord);
+	} catch (error) {
+		console.log(error);
+		if (error instanceof ZodError) {
+			res.status(400).json({ error: error.issues });
+			return;
+		}
+		throw error;
+	}
 });

@@ -11,3 +11,27 @@ Authorization: Bearer {{token}}
 ### Get by room id
 GET {{host}}/api/v1/rooms/12345
 Authorization: Bearer {{token}}
+
+
+### Add new room
+POST {{host}}/api/v1/rooms
+Content-Type: application/json
+
+{
+    "address": "Chennai, India",
+    "description": "Relax with the whole family at this peaceful place to stay.",
+    "images": [
+        "https://a0.muscache.com/im/pictures/hosting/Hosting-1114237414014272578/original/927f5ab5-9b4f-4680-8c9a-25c8b53e0311.jpeg?im_w=1200",
+        "https://a0.muscache.com/im/pictures/hosting/Hosting-1114237414014272578/original/389c04bd-2159-45f4-bc5e-4f3963f99563.jpeg?im_w=720",
+        "https://a0.muscache.com/im/pictures/hosting/Hosting-1114237414014272578/original/dc4ae61a-4e82-444e-a045-db0d5092d9c4.jpeg?im_w=720",
+        "https://a0.muscache.com/im/pictures/hosting/Hosting-1114237414014272578/original/7fadd11a-ddfa-4ede-adf3-e7209e85cb76.jpeg?im_w=720",
+        "https://a0.muscache.com/im/pictures/hosting/Hosting-1114237414014272578/original/1cff011b-f272-4e86-b860-e6fbea5d799e.jpeg?im_w=1200"
+    ],
+    "name": "villa 814 on east coast road",
+    "price": "21000",
+    "summary": "Entire home in Chennai, India",
+    "type": "Home",
+    "userId": "fada82b0-3101-42d3-9b7b-0b7b386a4c78",
+    "amenities": ["Wifi"],
+    "propertyType": "Home"
+}

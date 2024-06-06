@@ -22,6 +22,13 @@
       "when": 1717004933576,
       "tag": "0002_real_shooting_star",
       "breakpoints": true
+    },
+    {
+      "idx": 3,
+      "version": "6",
+      "when": 1717694243822,
+      "tag": "0003_clear_justice",
+      "breakpoints": true
     }
   ]
 }

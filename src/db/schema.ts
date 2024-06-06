@@ -10,7 +10,7 @@ export const users = pgTable('users', {
 	createdAt: text('created_at').notNull(),
 });
 
-export type User = InferSelectModel<typeof users>;
+export type IUser = InferSelectModel<typeof users>;
 
 export const rooms = pgTable('rooms', {
 	id: text('id').primaryKey(),
@@ -32,7 +32,7 @@ export const rooms = pgTable('rooms', {
 	address: text('address').notNull(),
 });
 
-export type Room = InferSelectModel<typeof rooms>;
+export type IRoom = InferSelectModel<typeof rooms>;
 
 // export const roomsRelations = relations(rooms, ({ one, many }) => ({
 // 	user: one(users, { fields: [rooms.userId], references: [users.id] }),
@@ -53,7 +53,7 @@ export const prices = pgTable('prices', {
 	serviceCharge: decimal('service_charge').notNull(),
 });
 
-export type Price = InferSelectModel<typeof prices>;
+export type IPrice = InferSelectModel<typeof prices>;
 
 export const images = pgTable('images', {
 	id: text('id').primaryKey(),
@@ -89,6 +89,7 @@ export const bookings = pgTable('bookings', {
 	price: text('booking_price').notNull(),
 	currency: text('currency').notNull(),
 	createdAt: text('created_at').notNull(),
+	modifiedAt: text('modified_at').notNull(),
 });
 
 export const insertWishlistSchema = createInsertSchema(wishlists);
@@ -102,18 +103,12 @@ export const insertBookingsSchema = createInsertSchema(bookings);
 // 	wishlists: many(wishlists),
 // }));
 
-// export const bookingRelations = relations(bookings, ({ one, many }) => ({
-// 	user: one(users, { fields: [bookings.userId], references: [users.id] }),
-// 	room: one(rooms, { fields: [bookings.roomId], references: [rooms.id] }),
-// 	bookings: many(bookings),
-// }));
-
-export const roomRelations = relations(rooms, ({ one, many }) => ({
-	user: one(users, { fields: [rooms.userId], references: [users.id] }),
-	images: many(images),
-	price: one(prices, { fields: [rooms.id], references: [prices.roomId] }),
-	// bookings: many(bookings),
-	// wishlists: many(wishlists),
+export const bookingRelations = relations(bookings, ({ one, many }) => ({
+	user: one(users, { fields: [bookings.userId], references: [users.id] }),
+	room: one(rooms, {
+		fields: [bookings.roomId],
+		references: [rooms.id],
+	}),
 }));
 
 export const imageRelations = relations(images, ({ one }) => ({

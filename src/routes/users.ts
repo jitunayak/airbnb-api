@@ -2,18 +2,19 @@ import { eq } from 'drizzle-orm';
 import express from 'express';
 import { ZodError } from 'zod';
 import { insertUserSchema, users, wishlists } from '../db/schema';
+import { verifyToken } from '../utils/authUtils';
 import { buildResultResponse, getDbClient } from '../utils/util';
 
 export const usersRoute = express.Router();
 
 const db = getDbClient();
 
-usersRoute.get('/', async (req, res) => {
+usersRoute.get('/', verifyToken, async (req, res) => {
 	const result = await db.select().from(users);
 	res.json(buildResultResponse(result));
 });
 
-usersRoute.get('/:id', async (req, res) => {
+usersRoute.get('/:id', verifyToken, async (req, res) => {
 	const result = await db.select().from(users).where(eq(users.id, req.params.id));
 	if (result.length === 0) {
 		return res.status(404).send('User not found');
@@ -21,7 +22,7 @@ usersRoute.get('/:id', async (req, res) => {
 	res.json(result[0]);
 });
 
-usersRoute.post('', async (req, res) => {
+usersRoute.post('/', verifyToken, async (req, res) => {
 	try {
 		const body = req.body;
 		const { name, email, id } = insertUserSchema.parse(body);
@@ -36,7 +37,7 @@ usersRoute.post('', async (req, res) => {
 	}
 });
 
-usersRoute.get('/:id/wishlists', async (req, res) => {
+usersRoute.get('/:id/wishlists', verifyToken, async (req, res) => {
 	const wishLists = await db.select().from(wishlists).where(eq(wishlists.userId, req.params.id));
 	res.json(buildResultResponse(wishLists));
 });

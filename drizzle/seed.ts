@@ -166,6 +166,7 @@ Perched atop the hills and affording 360º views of the contrasts of sea- and fo
 				price: '100',
 				currency: 'INR',
 				createdAt: new Date().toISOString(),
+				modifiedAt: new Date().toISOString(),
 			},
 		]);
 	} catch (error) {

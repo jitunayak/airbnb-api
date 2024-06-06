@@ -11,7 +11,7 @@
 		"db:generate": "drizzle-kit generate",
 		"db:migrate": "tsx ./drizzle/migrate.ts",
 		"db:seed": "tsx ./drizzle/seed.ts",
-		"db:studio": "drizzle-kit studio --port 3000 --verbose",
+		"db:studio": "drizzle-kit studio --port 4000 --verbose",
 		"email:dev": "email dev",
 		"env:push": "npx dotenv-vault@latest push",
 		"env:pull": "npx dotenv-vault@latest pull",

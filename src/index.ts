@@ -1,6 +1,7 @@
 import cors from 'cors';
 import { config } from 'dotenv';
 import express from 'express';
+import { bookingsRoute } from './routes/bookings';
 import { emailsRoute, roomsRoute, usersRoute, wishlistsRoute } from './routes/index';
 import { handlerError } from './utils/util';
 
@@ -24,6 +25,8 @@ app.use('/api/v1/wishlists', wishlistsRoute);
 app.use('/api/v1/users', usersRoute);
 app.use('/api/v1/emails', emailsRoute);
 app.use('/api/v1/rooms', roomsRoute);
+app.use('/api/v1/bookings', bookingsRoute);
+app.use('*', (req, res) => res.status(404).send('Route not found'));
 
 const port = process.env.PORT || 3000;
 console.log(`Server is running on port http://localhost:${port} 🔥`);
