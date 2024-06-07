@@ -98,10 +98,10 @@ export const insertImagesSchema = createInsertSchema(images);
 export const insertRoomsSchema = createInsertSchema(rooms);
 export const insertBookingsSchema = createInsertSchema(bookings);
 
-// export const wishlistRelations = relations(wishlists, ({ one, many }) => ({
-// 	user: one(users, { fields: [wishlists.userId], references: [users.id] }),
-// 	wishlists: many(wishlists),
-// }));
+export const wishlistRelations = relations(wishlists, ({ one, many }) => ({
+	user: one(users, { fields: [wishlists.userId], references: [users.id] }),
+	room: one(rooms, { fields: [wishlists.roomId], references: [rooms.id] }),
+}));
 
 export const bookingRelations = relations(bookings, ({ one, many }) => ({
 	user: one(users, { fields: [bookings.userId], references: [users.id] }),
@@ -109,10 +109,12 @@ export const bookingRelations = relations(bookings, ({ one, many }) => ({
 		fields: [bookings.roomId],
 		references: [rooms.id],
 	}),
+	images: many(images),
 }));
 
 export const imageRelations = relations(images, ({ one }) => ({
 	room: one(rooms, { fields: [images.roomId], references: [rooms.id] }),
+	bookings: one(bookings, { fields: [images.roomId], references: [bookings.roomId] }),
 }));
 
 export const priceRelations = relations(prices, ({ one }) => ({
@@ -121,4 +123,14 @@ export const priceRelations = relations(prices, ({ one }) => ({
 
 export const userRelations = relations(users, ({ one, many }) => ({
 	rooms: many(rooms),
+	bookings: many(bookings),
+	wishlists: many(wishlists),
+}));
+
+export const roomRelations = relations(rooms, ({ one, many }) => ({
+	images: many(images),
+	price: one(prices, { fields: [rooms.id], references: [prices.roomId] }),
+	bookings: many(bookings),
+	wishlists: many(wishlists),
+	user: one(users, { fields: [rooms.userId], references: [users.id] }),
 }));
