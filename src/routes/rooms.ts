@@ -10,25 +10,48 @@ export const roomsRoute = express.Router();
 const db = getDbClient();
 
 roomsRoute.get('/', async (req, res) => {
-	// select().from(rooms).leftJoin(prices, eq(rooms.id, prices.roomId));
-	const result = await db.query.rooms.findMany({
-		columns: {
-			updatedAt: false,
-			createdAt: false,
-		},
-		with: {
-			images: { columns: { roomId: false, createdAt: false } },
-			price: {
-				columns: {
-					roomId: false,
-					createdAt: false,
-					updatedAt: false,
+	const hostId = req.query.hostId as string;
+	let result;
+	if (hostId) {
+		result = await db.query.rooms.findMany({
+			where: eq(rooms.userId, hostId),
+			columns: {
+				updatedAt: false,
+				createdAt: false,
+			},
+			with: {
+				images: { columns: { roomId: false, createdAt: false } },
+				price: {
+					columns: {
+						roomId: false,
+						createdAt: false,
+						updatedAt: false,
+					},
 				},
 			},
-		},
-		offset: req.query.offset ? Number(req.query.offset) : 0,
-		limit: req.query.limit ? Number(req.query.limit) : 10,
-	});
+			offset: req.query.offset ? Number(req.query.offset) : 0,
+			limit: req.query.limit ? Number(req.query.limit) : 10,
+		});
+	} else {
+		result = await db.query.rooms.findMany({
+			columns: {
+				updatedAt: false,
+				createdAt: false,
+			},
+			with: {
+				images: { columns: { roomId: false, createdAt: false } },
+				price: {
+					columns: {
+						roomId: false,
+						createdAt: false,
+						updatedAt: false,
+					},
+				},
+			},
+			offset: req.query.offset ? Number(req.query.offset) : 0,
+			limit: req.query.limit ? Number(req.query.limit) : 10,
+		});
+	}
 	res.json(result);
 });
 
@@ -127,6 +150,6 @@ roomsRoute.post('/', verifyToken, async (req, res) => {
 			res.status(400).json({ error: error.issues });
 			return;
 		}
-		throw error;
+		res.status(500).send(error || 'Internal server error');
 	}
 });
