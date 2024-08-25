@@ -21,7 +21,7 @@ app.use((req, res, next) => {
 });
 
 app.use(express.json());
-app.use(cors({ origin: ['https://aircnc-jitunayak.vercel.app', 'http://localhost:3000'] }));
+app.use(cors({ origin: ['https://aircnc-jitunayak.vercel.app', 'https://airbnb-api-dv5w.onrender.com', 'http://localhost:3000'] }));
 
 app.get('/', (req, res) => res.send('Airbnb API is running 🔥'));
 // app.use(verifyToken);
@@ -34,7 +34,7 @@ app.use('/api/v1/bookings', bookingsRoute);
 
 const io = new Server(server, {
 	cors: {
-		origin: ['http://localhost:3000'],
+		origin: ['http://localhost:3000', 'https://aircnc-jitunayak.vercel.app', 'https://airbnb-api-dv5w.onrender.com'],
 		methods: ['GET', 'POST'],
 	},
 });
