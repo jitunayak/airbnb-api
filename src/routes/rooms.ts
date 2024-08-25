@@ -52,7 +52,15 @@ roomsRoute.get('/', async (req, res) => {
 			limit: req.query.limit ? Number(req.query.limit) : 10,
 		});
 	}
-	res.json(result);
+	res.json(
+		result.map((room) => ({
+			...room,
+			images: room.images
+				.map((value) => ({ value, sort: Math.random() }))
+				.sort((a, b) => a.sort - b.sort)
+				.map(({ value }) => value),
+		}))
+	);
 });
 
 roomsRoute.get('/:id', async (req, res) => {
