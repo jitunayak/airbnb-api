@@ -4,6 +4,7 @@ import { ZodError } from 'zod';
 import { IRoom, images, prices, rooms } from '../db/schema';
 import { IRoomInputSchema } from '../schemas/RoomSchema';
 import { verifyToken } from '../utils/authUtils';
+import { rateLimiter } from '../utils/rateLimiter';
 import { getDbClient } from './../utils/util';
 
 export const roomsRoute = express.Router();
@@ -98,7 +99,7 @@ roomsRoute.get('/:id/images', async (req, res) => {
 	res.json(result);
 });
 
-roomsRoute.post('/', verifyToken, async (req, res) => {
+roomsRoute.post('/', verifyToken, rateLimiter, async (req, res) => {
 	try {
 		const body = req.body;
 
