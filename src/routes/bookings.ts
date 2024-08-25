@@ -40,3 +40,20 @@ bookingsRoute.get('/', async (req, res) => {
 
 	res.json(allBookings);
 });
+
+bookingsRoute.post('/', async (req, res) => {
+	const { userId, roomId, checkInDate, checkOutDate, price, currency } = req.body;
+	const result = await db.insert(bookings).values({
+		id: crypto.randomUUID(),
+		userId: userId,
+		roomId: roomId,
+		currency: currency,
+		checkIn: checkInDate,
+		checkOut: checkOutDate,
+		price: price,
+		status: 'pending',
+		createdAt: new Date().toISOString(),
+		modifiedAt: new Date().toISOString(),
+	});
+	res.status(201).json(result);
+});
