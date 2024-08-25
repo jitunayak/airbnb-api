@@ -1,4 +1,4 @@
-import { eq } from 'drizzle-orm';
+import { desc, eq } from 'drizzle-orm';
 import express from 'express';
 import { bookings } from '../db/schema';
 import { getDbClient } from '../utils/util';
@@ -36,6 +36,7 @@ bookingsRoute.get('/', async (req, res) => {
 				},
 			},
 		},
+		orderBy: [desc(bookings.checkIn)],
 	});
 
 	res.json(allBookings);
