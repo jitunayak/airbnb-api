@@ -1,6 +1,8 @@
 import { desc, eq } from 'drizzle-orm';
 import express from 'express';
 import { bookings } from '../db/schema';
+import { sendBookingConfirmationEmail } from '../email/bookingConfirmation';
+import { env } from '../utils/config';
 import { getDbClient } from '../utils/util';
 
 export const bookingsRoute = express.Router();
@@ -43,9 +45,10 @@ bookingsRoute.get('/', async (req, res) => {
 });
 
 bookingsRoute.post('/', async (req, res) => {
-	const { userId, roomId, checkInDate, checkOutDate, price, currency } = req.body;
+	const { userId, roomId, checkInDate, checkOutDate, price, currency, email } = req.body;
+	const id = crypto.randomUUID();
 	const result = await db.insert(bookings).values({
-		id: crypto.randomUUID(),
+		id,
 		userId: userId,
 		roomId: roomId,
 		currency: currency,
@@ -56,5 +59,15 @@ bookingsRoute.post('/', async (req, res) => {
 		createdAt: new Date().toISOString(),
 		modifiedAt: new Date().toISOString(),
 	});
+
+	await sendBookingConfirmationEmail({
+		to: email,
+		name: email.split('@')[0],
+		apiKey: env.EMAIL_API_KEY,
+		bookingId: id,
+		checkInDate: checkInDate,
+		checkOutDate: checkOutDate,
+	});
+
 	res.status(201).json(result);
 });
