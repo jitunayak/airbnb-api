@@ -3,6 +3,7 @@
 		"name": "Jitu Nayak",
 		"url": "https://github.com/jitunayak"
 	},
+	"packageManager": "pnpm@9.8.0",
 	"scripts": {
 		"dev": "tsx --watch ./src/index.ts",
 		"build": "tsc -p .",
@@ -25,6 +26,7 @@
 		"@types/http-errors": "^2.0.4",
 		"@types/node": "^20.12.12",
 		"@types/react": "^18.3.3",
+		"@types/socket.io": "^3.0.2",
 		"dotenv": "^16.4.5",
 		"drizzle-kit": "^0.21.4",
 		"tsx": "^4.11.0",
@@ -45,6 +47,7 @@
 		"jwks-rsa": "^3.1.0",
 		"react": "^18.3.1",
 		"resend": "^3.2.0",
+		"socket.io": "^4.7.5",
 		"zod": "^3.23.8"
 	}
 }

@@ -1,12 +1,17 @@
 import cors from 'cors';
 import { config } from 'dotenv';
 import express from 'express';
+import { Server } from 'socket.io';
 import { bookingsRoute } from './routes/bookings';
 import { emailsRoute, roomsRoute, usersRoute, wishlistsRoute } from './routes/index';
 import { handlerError } from './utils/util';
 
 config();
 const app = express();
+
+import http from 'http';
+const server = http.createServer(app);
+
 app.use((req, res, next) => {
 	try {
 		next();
@@ -26,10 +31,22 @@ app.use('/api/v1/users', usersRoute);
 app.use('/api/v1/emails', emailsRoute);
 app.use('/api/v1/rooms', roomsRoute);
 app.use('/api/v1/bookings', bookingsRoute);
+
+const io = new Server(server, {
+	cors: {
+		origin: ['http://localhost:3000'],
+		methods: ['GET', 'POST'],
+	},
+});
+io.on('connection', (socket) => {
+	socket.on('message', (message) => {
+		socket.broadcast.emit('message', message);
+	});
+});
 app.use('*', (req, res) => res.status(404).send('Route not found'));
 
 const port = process.env.PORT || 3000;
 console.log(`Server is running on port http://localhost:${port} 🔥`);
-app.listen(port);
+server.listen(port);
 
 export default app;
